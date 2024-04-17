@@ -1,0 +1,33 @@
+{
+  "employee": [
+    {
+      "name": "John",
+      "benefits": 101,
+      "age": 30
+    },
+    {
+      "name": "Mike",
+      "benefits": 102,
+      "age": 25
+    },
+    {
+      "name": "Sara",
+      "benefits": 103,
+      "age": 28
+    }
+  ],
+  "benefits": [
+    {
+      "name": "spa",
+      "benefit_id": "101"
+    },
+    {
+      "name": "nuru",
+      "benefit_id": "102"
+    },
+    {
+      "name": "sauna",
+      "benefit_id": "103"
+    }
+  ]
+}
