@@ -1,45 +1,7 @@
 <div class="m-10">
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-    <mat-tab label="OptIn">
+    <mat-tab label="OptOut">
       <mat-card class="p-5">
-        <mat-card-content>
-          <form class="example-form">
-            <div class="flex items-center justify-between space-x-20">
-              <div>Benefit Id</div>
-              <mat-form-field>
-                <mat-label>Benefit Id</mat-label>
-                <input
-                  type="text"
-                  placeholder="Pick one"
-                  aria-label="Number"
-                  matInput
-                  [matAutocomplete]="auto"
-                  [formControl]="myControl"
-                />
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                  @for (option of filteredBenefits | async; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
-                  }
-                </mat-autocomplete>
-              </mat-form-field>
-            </div>
-            <div class="flex items-center justify-between space-x-20">
-              <div>Eployee Id</div>
-
-              <mat-form-field>
-                <input matInput placeholder="employee ID" value="" />
-              </mat-form-field>
-            </div>
-
-            <div>
-              <button mat-flat-button color="warn w-1/3">Opt In</button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </mat-tab>
-    <mat-tab label="OptOut"
-      ><mat-card class="p-5">
         <mat-card-content>
           <form [formGroup]="form" class="example-form">
             <div class="flex items-center justify-between space-x-20">
@@ -48,15 +10,14 @@
                 <mat-label>Benefit Id</mat-label>
                 <input
                   type="text"
-                  placeholder="Pick one"
                   aria-label="Number"
                   matInput
                   formControlName="benefitId"
                   [matAutocomplete]="auto"
                 />
-                <mat-autocomplete  #auto="matAutocomplete">
+                <mat-autocomplete requireSelection #auto="matAutocomplete">
                   @for (option of filteredBenefits | async; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option"> {{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -72,22 +33,75 @@
                   placeholder="employee ID"
                   [matAutocomplete]="auto"
                 />
-                <mat-autocomplete  #auto="matAutocomplete">
+                <mat-autocomplete #auto="matAutocomplete">
                   @for (option of filteredEmployees | async; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option"> {{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
             </div>
 
             <div>
-              <button (click)="submitForm()" mat-flat-button color="warn w-1/3">
+              <button (click)="onUpload()" mat-flat-button color="warn w-1/3">
                 Opt Out
               </button>
             </div>
           </form>
+          <div class="my-5">
+            <input type="file" (change)="onFileChange($event)" accept=".csv" />
+            <label class="mt-2" for="inputGroupFile">Choose File</label>
+          </div>
+          <button mat-flat-button color="warn w-1/3">upload</button>
         </mat-card-content>
-      </mat-card></mat-tab
-    >
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab label="transactions" ngSkipHydration>
+      <div>
+        <mat-form-field>
+          <mat-label class="mt-2">Filter</mat-label>
+          <input matInput (keypress)="applyFilter($event)" #input />
+        </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>id</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="employeeId">
+            <th mat-header-cell *matHeaderCellDef>employeeId</th>
+            <td mat-cell *matCellDef="let element">{{ element.employeeId }}</td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="benefitId">
+            <th mat-header-cell *matHeaderCellDef>benefitId</th>
+            <td mat-cell *matCellDef="let element">{{ element.benefitId }}</td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>action</th>
+            <td mat-cell *matCellDef="let element">{{ element.action }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>date</th>
+            <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+    </mat-tab>
   </mat-tab-group>
 </div>
