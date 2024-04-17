@@ -21,6 +21,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { map, Observable, of, startWith } from 'rxjs';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { AsyncPipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface auditTable {
   id: string;
@@ -68,7 +69,7 @@ export class AppComponent implements OnInit {
 
   form: FormGroup;
 
-  constructor(private http: HttpClient) {
+  constructor(private _snackBar: MatSnackBar, private http: HttpClient) {
     this.form = new FormGroup({
       employeeId: new FormControl(''),
       benefitId: new FormControl(),
@@ -84,7 +85,6 @@ export class AppComponent implements OnInit {
   ];
 
   applyFilter(event: Event) {
-
     const filterValue = (event.target as HTMLInputElement).value;
     console.log('filterValue', filterValue);
 
@@ -187,6 +187,10 @@ export class AppComponent implements OnInit {
         });
         console.log('audit data', this.dataSource);
       });
+  }
+
+  openSnackBar(action: string) {
+    this._snackBar.open('opted out', action);
   }
 
   submitForm() {
