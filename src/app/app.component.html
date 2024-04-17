@@ -32,6 +32,7 @@
                   matInput
                   placeholder="employee ID"
                   [matAutocomplete]="auto"
+                  #action
                 />
                 <mat-autocomplete #auto="matAutocomplete">
                   @for (option of filteredEmployees | async; track option) {
@@ -42,7 +43,12 @@
             </div>
 
             <div>
-              <button (click)="onUpload()" mat-flat-button color="warn w-1/3">
+              <button
+                mat-stroked-button
+                (click)="openSnackBar(action.value)"
+                mat-flat-button
+                color="warn w-1/3"
+              >
                 Opt Out
               </button>
             </div>
