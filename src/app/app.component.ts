@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
   selectedFile: File | null = null;
   benefitId: string[] = [];
   employeeId: string[] = [];
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<auditTable>();
   filteredBenefits: Observable<string[]> = new Observable<string[]>();
   filteredEmployees: Observable<string[]> = new Observable<string[]>();
 
@@ -175,16 +175,9 @@ export class AppComponent implements OnInit {
   fetchAudit() {
     console.log('Fetching audit data');
     this.http
-      .get('http://localhost:8080/history/all')
-      .subscribe((response: any) => {
-        this.dataSource = response.map((audit: any) => {
-          audit.id = audit.id;
-          audit.action = audit.action;
-          audit.employeeId = audit.employeeId;
-          audit.benefitId = audit.benefitId;
-          audit.date = audit.date;
-          return audit; // Add this line to return the modified audit object
-        });
+      .get<auditTable[]>('http://localhost:8080/history/all')
+      .subscribe((response: auditTable[]) => {
+        this.dataSource.data = response;
         console.log('audit data', this.dataSource);
       });
   }
