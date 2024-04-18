@@ -91,6 +91,16 @@ export class AppComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  fetchAudit() {
+    console.log('Fetching audit data');
+    this.http
+      .get<auditTable[]>('http://localhost:8080/history/all')
+      .subscribe((response: auditTable[]) => {
+        this.dataSource.data = response;
+        console.log('audit data', this.dataSource);
+      });
+  }
+
   ngOnInit() {
     this.fetchData();
     this.fetchEmployee();
@@ -119,8 +129,9 @@ export class AppComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', this.selectedFile);
+    console.log('file uploaded', formData);
 
-    this.http.post('http://localhost:8080/upload', formData).subscribe(
+    this.http.post('http://localhost:8080/upload?', formData).subscribe(
       (response) => {
         console.log('File uploaded successfully:', response);
         // Handle the response from the backend as needed
@@ -170,16 +181,6 @@ export class AppComponent implements OnInit {
       console.log('employeeId', this.employeeId);
       console.log('data2', this.data2);
     });
-  }
-
-  fetchAudit() {
-    console.log('Fetching audit data');
-    this.http
-      .get<auditTable[]>('http://localhost:8080/history/all')
-      .subscribe((response: auditTable[]) => {
-        this.dataSource.data = response;
-        console.log('audit data', this.dataSource);
-      });
   }
 
   openSnackBar(action: string) {
