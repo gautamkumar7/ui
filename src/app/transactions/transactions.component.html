@@ -1,0 +1,235 @@
+<div class="m-10">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab label="OptIn">
+      <mat-card class="p-5">
+        <mat-card-content>
+          <form [formGroup]="form" class="example-form">
+            <div class="flex items-center justify-between space-x-20">
+              <div>Benefit_Id</div>
+              <mat-form-field>
+                <input
+                  placeholder="Benefit Id"
+                  type="text"
+                  matInput
+                  #benefitIdInput
+                  formControlName="benefitId"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete requireSelection #auto="matAutocomplete">
+                  @for (option of filteredBenefits | async; track option) {
+                  <mat-option [value]="option"> {{ option }}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <button
+              mat-stroked-button
+              (click)="fetchByBenefitId(benefitIdInput.value)"
+              mat-flat-button
+              color=" w-1/3"
+              class="my-5"
+            >
+              Opt Inn
+            </button>
+
+            <div ngIf="dataSource1.data.length > 0">
+              
+              <table
+                mat-table
+                [dataSource]="dataSource1"
+                class="mat-elevation-z8"
+              >
+                <!-- <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <mat-checkbox
+                      (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()"
+                    >
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <mat-checkbox
+                      (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)"
+                    >
+                    </mat-checkbox>
+                  </td>
+                </ng-container> -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>id</th>
+                  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="employeeId">
+                  <th mat-header-cell *matHeaderCellDef>employeeId</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.employeeId }}
+                  </td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="benefitId">
+                  <th mat-header-cell *matHeaderCellDef>benefitId</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.benefitId }}
+                  </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>action</th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.action }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef>date</th>
+                  <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  (click)="selection.toggle(row)"
+                ></tr>
+              </table>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+    <mat-tab label="transactions" ngSkipHydration>
+      <div class="my-6">
+        <input matInput placeholder="benefitId" #benefitIdInput />
+        <button
+          mat-raised-button
+          (click)="fetchByBenefitId(benefitIdInput.value)"
+          color="warn"
+        >
+          Find
+        </button>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label class="mt-2">Filter</mat-label>
+          <input matInput (keypress)="applyFilter($event)" #input />
+        </mat-form-field>
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>id</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="employeeId">
+            <th mat-header-cell *matHeaderCellDef>employeeId</th>
+            <td mat-cell *matCellDef="let element">{{ element.employeeId }}</td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="benefitId">
+            <th mat-header-cell *matHeaderCellDef>benefitId</th>
+            <td mat-cell *matCellDef="let element">{{ element.benefitId }}</td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>action</th>
+            <td mat-cell *matCellDef="let element">{{ element.action }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>date</th>
+            <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+      </div>
+    </mat-tab>
+    <mat-tab label="OptOut">
+      <mat-card class="p-5">
+        <mat-card-content>
+          <form [formGroup]="form" class="example-form">
+            <div class="flex items-center justify-between space-x-20">
+              <div>Benefit Id</div>
+              <mat-form-field>
+                <mat-label>Benefit Id</mat-label>
+                <input
+                  type="text"
+                  aria-label="Number"
+                  matInput
+                  formControlName="benefitId"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete requireSelection #auto="matAutocomplete">
+                  @for (option of filteredBenefits | async; track option) {
+                  <mat-option [value]="option"> {{ option }}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="flex items-center justify-between space-x-20">
+              <div>Eployee Id</div>
+
+              <mat-form-field>
+                <input
+                  type="string"
+                  formControlName="employeeId"
+                  matInput
+                  placeholder="employee ID"
+                  [matAutocomplete]="auto"
+                  #action
+                />
+                <mat-autocomplete #auto="matAutocomplete">
+                  @for (option of filteredEmployees | async; track option) {
+                  <mat-option [value]="option"> {{ option }}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <button
+                mat-stroked-button
+                (click)="openSnackBar(action.value)"
+                mat-flat-button
+                color=" w-1/3"
+              >
+                Opt Out
+              </button>
+            </div>
+            <div class="my-5 flex">
+              <input
+                type="file"
+                name="file"
+                (change)="onFileChange($event)"
+                accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              />
+
+              <button (click)="onUpload()" mat-flat-button color="warn w-1/3">
+                upload
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</div>
