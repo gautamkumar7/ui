@@ -9,7 +9,6 @@
     "test": "ng test",
     "serve:ssr:ui": "node dist/ui/server/server.mjs",
     "server": "bunx json-server --watch db.json"
-
   },
   "private": true,
   "dependencies": {
@@ -29,6 +28,7 @@
     "json-server": "^1.0.0-alpha.23",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {
